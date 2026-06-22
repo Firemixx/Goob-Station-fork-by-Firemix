@@ -280,11 +280,17 @@ public abstract partial class SharedFultonSystem : EntitySystem
 
     private void OnEmagged(EntityUid ent,FultonComponent comp, ref GotEmaggedEvent args)
     {
-        comp.Whitelist.Components=comp.Whitelist.Components
-        .Union(new[] { "MindContainer" })
-        .ToArray();
+        ChangeWhitelistToEvac(comp,"MindContainer"); // All mobs can be extracted by fulton after emagging
+        _popup.PopupClient(Loc.GetString("fulton-emagged"), ent);
+    }
 
-        _popup.PopupClient(Loc.GetString("fulton-emagged"), ent.Owner);
+
+    // Adding new Comp to whitelist for evac
+    protected void ChangeWhitelistToEvac(FultonComponent comp,string nameComp)
+    {
+        comp.Whitelist.Components=comp.Whitelist.Components
+        .Union(new[] { nameComp })
+        .ToArray();
     }
 
     [Serializable, NetSerializable]
