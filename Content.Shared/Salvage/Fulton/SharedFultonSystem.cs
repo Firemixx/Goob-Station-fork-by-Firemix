@@ -77,7 +77,9 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 using System.Numerics;
+using System.Linq;
 using Content.Shared.DoAfter;
+using Content.Shared.Emag.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Foldable;
 using Content.Shared.Interaction;
@@ -126,6 +128,8 @@ public abstract partial class SharedFultonSystem : EntitySystem
         SubscribeLocalEvent<FultonComponent, AfterInteractEvent>(OnFultonInteract);
 
         SubscribeLocalEvent<FultonComponent, StackSplitEvent>(OnFultonSplit);
+
+        SubscribeLocalEvent<FultonComponent, GotEmaggedEvent>(OnEmagged);
     }
 
     private void OnFultonContainerInserted(EntityUid uid, FultonedComponent component, EntGotInsertedIntoContainerMessage args)
@@ -272,6 +276,15 @@ public abstract partial class SharedFultonSystem : EntitySystem
             return false;
 
         return true;
+    }
+
+    private void OnEmagged(EntityUid ent,FultonComponent comp, ref GotEmaggedEvent args)
+    {
+        comp.Whitelist.Components=comp.Whitelist.Components
+        .Union(new[] { "MindContainer" })
+        .ToArray();
+
+        _popup.PopupClient(Loc.GetString("fulton-emagged"), ent.Owner);
     }
 
     [Serializable, NetSerializable]
