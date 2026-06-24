@@ -79,7 +79,6 @@
 using System.Numerics;
 using System.Linq;
 using Content.Shared.DoAfter;
-using Content.Shared.Emag.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Foldable;
 using Content.Shared.Interaction;
@@ -128,8 +127,6 @@ public abstract partial class SharedFultonSystem : EntitySystem
         SubscribeLocalEvent<FultonComponent, AfterInteractEvent>(OnFultonInteract);
 
         SubscribeLocalEvent<FultonComponent, StackSplitEvent>(OnFultonSplit);
-
-        SubscribeLocalEvent<FultonComponent, GotEmaggedEvent>(OnEmagged);
     }
 
     private void OnFultonContainerInserted(EntityUid uid, FultonedComponent component, EntGotInsertedIntoContainerMessage args)
@@ -276,22 +273,6 @@ public abstract partial class SharedFultonSystem : EntitySystem
             return false;
 
         return true;
-    }
-
-    private void OnEmagged(EntityUid ent,FultonComponent comp, ref GotEmaggedEvent args)
-    {
-        ChangeWhitelistToEvac(comp,"MindContainer"); // All mobs can be extracted by fulton after emagging
-        _popup.PopupEntity(Loc.GetString("fulton-emagged"), ent);
-        Audio.PlayPredicted(comp.FultonSoundEmag, ent, ent);
-    }
-
-
-    // Adding new Comp to whitelist for evac
-    public void ChangeWhitelistToEvac(FultonComponent comp,string nameComp)
-    {
-        comp.Whitelist.Components=comp.Whitelist.Components
-        .Union(new[] { nameComp })
-        .ToArray();
     }
 
     [Serializable, NetSerializable]
