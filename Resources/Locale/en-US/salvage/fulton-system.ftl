@@ -11,4 +11,3 @@ fulton-not-found = No beacon found
 fulton-invalid = Can't fulton
 fulton-fultoned = Already fultoned
 fulton-remove = Remove fulton
-fulton-emagged = The circuit board is hacked, welcome home, Boss!

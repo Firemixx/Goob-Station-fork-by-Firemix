@@ -5,8 +5,8 @@ using Content.Shared.Salvage.Fulton;
 using Robust.Shared.Audio.Systems;
 
 namespace Content.Goobstation.Shared.Salvage.Fulton;
-// Class for Goob Station changes in fulton
-public sealed class SharedFultonSystem : EntitySystem
+// Emagged interaction with EMAG
+public sealed class EmaggedFultonSystem : EntitySystem
 {
     [Dependency] protected readonly SharedAudioSystem Audio = default!;
     [Dependency] private   readonly SharedPopupSystem _popup = default!;
@@ -27,6 +27,8 @@ public sealed class SharedFultonSystem : EntitySystem
     // Adding new Comp to whitelist for evac
     public void ChangeWhitelistToEvac(FultonComponent comp,string nameComp)
     {
+        if (comp==null)
+            return;
         comp.Whitelist.Components=comp.Whitelist.Components
         .Union(new[] { nameComp })
         .ToArray();
